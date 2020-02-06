@@ -1,3 +1,5 @@
+const { DEFAULT_ALGORITHM, ALGORITHMS_LIST } = require("../constants");
+
 /**
  * Verify that the given configuration has a valid format
  * @param config {object} - The verified configuration
@@ -6,20 +8,20 @@
 module.exports = function fillConfiguration(config) {
   if (!config) {
     return {
-      error: "ContextError",
+      error: "ConfigError",
       message: `No configuration has been provided`
     };
   }
   let filledConfig = config;
   if (typeof filledConfig !== "object") {
     return {
-      error: "ContextError",
+      error: "ConfigError",
       message: `The given configuration should be an object but got ${typeof filledConfig}`
     };
   }
   if (!filledConfig.properties) {
     return {
-      error: "ContextError",
+      error: "ConfigError",
       message:
         'The configuration must provide a "properties" attribute containing all the element to search.'
     };
@@ -27,7 +29,7 @@ module.exports = function fillConfiguration(config) {
   const { properties } = filledConfig;
   if (typeof properties !== "object") {
     return {
-      error: "ContextError",
+      error: "ConfigError",
       message: `Configuration's "properties" attribute should be an array but got ${typeof properties}`
     };
   }
@@ -42,7 +44,7 @@ module.exports = function fillConfiguration(config) {
               filledConfig.properties[property].weight = parseInt(weight);
             } catch (err) {
               return {
-                error: "ContextError",
+                error: "ConfigError",
                 message: `Index ${property}'s "weight" attribute should be a number of type number or a parsable string but got ${importance}`
               };
             }
@@ -50,26 +52,40 @@ module.exports = function fillConfiguration(config) {
         }
       } else {
         return {
-          error: "ContextError",
+          error: "ConfigError",
           message: `If you choose to set the value of a property as an object you must provide the "weight" attribute`
         };
       }
     } else if (typeof spec === "number") {
       if (spec < 0) {
         return {
-          error: "ContextError",
+          error: "ConfigError",
           message: `Configuration's "properties" should be setted with a number greater than 0 but got ${value} for ${property}`
         };
       }
       filledConfig.properties[property] = { weight: spec };
     } else {
       return {
-        error: "ContextError",
+        error: "ConfigError",
         message: `Configuration's "properties" for ${property} attribute should contain elements of type object or number but got ${typeof value}.`
       };
     }
   }
   filledConfig.properties = normalizeWeights(filledConfig.properties);
+  if (!ALGORITHMS_LIST.includes(filledConfig.algorithm)) {
+    filledConfig.algorithm = DEFAULT_ALGORITHM;
+  }
+  const { threshold } = filledConfig;
+  if (!threshold) {
+    filledConfig.threshold = 0;
+  } else {
+    if (typeof threshold !== "number" || threshold < 0 || threshold > 1) {
+      return {
+        error: "ConfigError",
+        message: "Invalid attribute: threshold"
+      };
+    }
+  }
   return filledConfig;
 };
 

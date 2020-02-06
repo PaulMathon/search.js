@@ -21,7 +21,9 @@ describe("CONFIGURATION :", () => {
         publicationDate: { weight: 0.09 },
         description: { weight: 0.18 },
         content: { weight: 0.09 }
-      }
+      },
+      algorithm: "include",
+      threshold: 0
     };
     expect(filledConfig).to.be.deep.equal(expectedConfig);
   });
@@ -30,7 +32,7 @@ describe("CONFIGURATION :", () => {
     const wrongTypeConfig = "The config shouldn't be a string";
     const filledConfig = fillConfiguration(wrongTypeConfig);
     const expectedError = {
-      error: "ContextError",
+      error: "ConfigError",
       message: `The given configuration should be an object but got ${typeof wrongTypeConfig}`
     };
     expect(filledConfig).to.be.deep.equal(expectedError);

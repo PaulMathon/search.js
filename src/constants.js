@@ -1,5 +1,2 @@
-module.exports.TYPE_OF_INDEX = [
-    'string',
-    'number',
-    'date'
-]
+module.exports.DEFAULT_ALGORITHM = "include";
+module.exports.ALGORITHMS_LIST = ["include"];

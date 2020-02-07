@@ -1,22 +1,4 @@
 /**
- * Compute the sum of each score per attributes.
- *
- * @param {Object} element Contains the scores to reduce.
- * @param {*} config Used to check if attribute as to be taken into account
- *
- * @returns {Number} The sum of the scores of each attribute set in the config.
- */
-function reduceElementScore(element, config) {
-  const properties = Object.keys(config.properties);
-  return Object.keys(element).reduce((score, attribute) => {
-    if (properties.includes(attribute)) {
-      return score + element[attribute];
-    }
-    return score;
-  }, 0);
-}
-
-/**
  * If a string includes the search input, then score = 1, if not score = 0.
  * @param {string} sentence a phrase we want to compute similarity with.
  * @param {array} searchInput The search string
@@ -52,22 +34,22 @@ function orderElements(elements) {
 }
 
 /**
- * UGGLYYY
+ * Compute a score for each element to filter in the array.
  * @param {array} elements 
  * @param {string} searchInput 
  * @param {object} config 
  */
 function getElementsScore(elements, searchInput, config) {
+  const properties = Object.keys(config.properties);
   const searchAlgorithm = getSearchAlgorithm(config.algorithm);
   elements.forEach((element) => {
-    const scoreElement = JSON.parse(JSON.stringify(element));
+    let score = 0;
     Object.keys(element).forEach((attribute) => {
-      scoreElement[attribute] = searchAlgorithm(
-        scoreElement[attribute],
-        searchInput
-      );
+      if (properties.includes(attribute)) {
+        score += searchAlgorithm(element[attribute], searchInput);
+      }
     });
-    element.score = reduceElementScore(scoreElement, config);
+    element.score = score;
   });
   return elements;
 }

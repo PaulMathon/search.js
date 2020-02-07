@@ -47,7 +47,7 @@ describe('SEARCH :', () => {
   ];
   const search = SearchEngine(configuration);
   it('Suceed', () => {
-    const searchResult = search(elementsToFilter, 'article');
+    const searchResult = search(elementsToFilter, 'Third');
     return expect(searchResult).not.to.be.undefined;
   });
 });

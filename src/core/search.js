@@ -46,7 +46,8 @@ function getElementsScore(elements, searchInput, config) {
     let score = 0;
     Object.keys(element).forEach((attribute) => {
       if (properties.includes(attribute)) {
-        score += searchAlgorithm(element[attribute], searchInput);
+        const { weight } = config.properties[attribute];
+        score += weight * searchAlgorithm(element[attribute], searchInput);
       }
     });
     element.score = score;

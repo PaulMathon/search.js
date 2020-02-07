@@ -1,9 +1,8 @@
-const fillConfiguration = require("../src/core/config");
-const { expect } = require("chai");
+const { expect } = require('chai');
+const fillConfiguration = require('../src/core/config');
 
-describe("CONFIGURATION :", () => {
-  afterEach(() => (filledConfig = undefined));
-  it("Succeeds with a valid configuration.", () => {
+describe('CONFIGURATION :', () => {
+  it('Succeeds with a valid configuration.', () => {
     const validConfig = {
       properties: {
         title: { weight: 4 },
@@ -22,17 +21,17 @@ describe("CONFIGURATION :", () => {
         description: { weight: 0.18 },
         content: { weight: 0.09 }
       },
-      algorithm: "include",
+      algorithm: 'include',
       threshold: 0
     };
     expect(filledConfig).to.be.deep.equal(expectedConfig);
   });
 
-  it("Fails with a wrong type configuration.", () => {
-    const wrongTypeConfig = "The config shouldn't be a string";
+  it('Fails with a wrong type configuration.', () => {
+    const wrongTypeConfig = 'The config shouldn\'t be a string';
     const filledConfig = fillConfiguration(wrongTypeConfig);
     const expectedError = {
-      error: "ConfigError",
+      error: 'ConfigError',
       message: `The given configuration should be an object but got ${typeof wrongTypeConfig}`
     };
     expect(filledConfig).to.be.deep.equal(expectedError);

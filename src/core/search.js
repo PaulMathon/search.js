@@ -59,8 +59,7 @@ function orderElements(elements) {
  */
 function getElementsScore(elements, searchInput, config) {
   const searchAlgorithm = getSearchAlgorithm(config.algorithm);
-  const elementsToMap = JSON.parse(JSON.stringify(elements));
-  elementsToMap.forEach((element) => {
+  elements.forEach((element) => {
     const scoreElement = JSON.parse(JSON.stringify(element));
     Object.keys(element).forEach((attribute) => {
       scoreElement[attribute] = searchAlgorithm(
@@ -70,7 +69,7 @@ function getElementsScore(elements, searchInput, config) {
     });
     element.score = reduceElementScore(scoreElement, config);
   });
-  return elementsToMap;
+  return elements;
 }
 
 module.exports = function search(config) {

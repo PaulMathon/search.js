@@ -1,23 +1,12 @@
 /**
- * If a string includes the search input, then score = 1, if not score = 0.
- * @param {string} sentence a phrase we want to compute similarity with.
- * @param {array} searchInput The search string
- * @returns {number} The similarity score.
- */
-function includeAlgorithm(sentence, searchInput) {
-  const successScore = 1;
-  const failureScore = 0;
-  return typeof sentence === 'string' && sentence.includes(searchInput) ? successScore : failureScore;
-}
-
-/**
  * Retrieve the choosen search algorithm according to the configuration.
  * @param {String} algorithm eanc
  * @returns {Function} The search algorithm that will compute the similarity score.
  */
 function getSearchAlgorithm(algorithm) {
   const algorithms = {
-    include: includeAlgorithm
+    include: require("../algorithm/default"),
+    levenshtein: require("../algorithm/levenshtein"),
   };
   return algorithms[algorithm];
 }
@@ -35,9 +24,9 @@ function orderElements(elements) {
 
 /**
  * Compute a score for each element to filter in the array.
- * @param {array} elements 
- * @param {string} searchInput 
- * @param {object} config 
+ * @param {array} elements
+ * @param {string} searchInput
+ * @param {object} config
  */
 function getElementsScore(elements, searchInput, config) {
   const properties = Object.keys(config.properties);
